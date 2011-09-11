@@ -1,0 +1,1 @@
+FB.init({apiKey:'',appId:'',status:true,cookie:true,fbml5:true});

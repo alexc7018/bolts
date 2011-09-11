@@ -1,0 +1,49 @@
+/* @group WordPress Classes */
+
+.aligncenter {
+	display: block;
+	margin: 1em auto;
+}
+
+.alignleft {
+	float: left;
+	margin: 0 1em 1em 0;
+}
+
+.alignright {
+	float: right;
+	margin: 0 0 1em 1em;
+}
+
+.gallery-caption {
+	width: 100%;
+}
+
+.gallery-item {
+	float: left;
+	text-align: center;
+	width: 33%;
+}
+
+.sticky h1 {
+	background: url(../images/exclamation.png) no-repeat left center;
+	text-indent: 36px;
+}
+
+.wp-caption {
+	text-align: center;
+}
+
+.wp-caption-text {
+	font-style: italic;
+}
+
+.wp-caption p {
+	margin: 0;
+}
+
+.wp-smiley {
+	border: none !important;
+}
+
+/* @end */

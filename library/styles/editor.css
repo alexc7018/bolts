@@ -1,0 +1,62 @@
+/* @group Text editor styling */
+
+@import url(bolts.css);
+
+* {
+	color: #222;
+	font-size: 13px/1.5;
+	font-family: Georgia;
+}
+
+a {
+	color: #09c;
+	text-decoration: none;
+}
+
+a:focus,
+a:hover {
+	text-decoration: underline;
+}
+
+blockquote {
+	margin: 0 1.5em 1.5em;
+}
+
+.clear {
+	clear: both;
+}
+
+code, pre {
+	font-family: Consolas, 'Andale Mono', Courier, monospace;
+}
+
+h1, h2 {
+	color: #000;
+	font-weight: normal;
+}
+
+h3, h4, h5, h6 {
+	color: #000;
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+h1 { font-size: 36px; }
+h2 { font-size: 28px; }
+h3 { font-size: 16px; }
+h4 { font-size: 14px; }
+h5 { font-size: 12px; }
+h6 { font-size: 11px; }
+
+ol, ul {
+	margin-left: 1.5em;
+	padding-left: 1.5em;
+}
+
+ul {
+	list-style-type: square;
+}
+
+/* @end */
+

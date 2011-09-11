@@ -1,0 +1,77 @@
+body {
+	font-family: Georgia, serif;
+}
+
+code,
+kbd,
+pre,
+tt {
+	font-family: Consolas, 'Panic Sans', Monaco, 'Andale Mono', monospace;
+}
+
+h1, h2 {
+	font-weight: normal;
+}
+
+h3, h4, h5, h6 {
+	text-transform: uppercase;
+}
+
+#content .archive-group h1 {
+	letter-spacing: normal;
+	text-transform: uppercase;
+}
+
+.post-format {
+	text-transform: uppercase;
+}
+
+.comment-meta,
+.comment-reply {
+	text-transform: uppercase;
+}
+
+.comment-meta cite {
+	font-family: Georgia, serif;
+	font-weight: normal;
+	letter-spacing: -1px;
+	text-transform: none;
+}
+
+input[type=text],
+input[type=email],
+input[type=url],
+input[type=password],
+textarea {
+	font-family: Georgia;
+}
+
+h3, h4, h5, h6,
+.post > footer,
+.page > footer,
+.post-format,
+.comment-meta,
+.comment .reply,
+footer nav,
+.widget.twitter .tweet_time,
+dl dt,
+#container > header h2,
+.bolts-drop-down-menu a,
+#content th,
+.pagination,
+.widget_calendar caption,
+.widget_calendar thead,
+.widget_calendar tfoot,
+label,
+#content .archive-group h1,
+aside.site-sidebar h1,
+footer .column h1,
+.bolts-credit-link,
+.bolts-breadcrumbs,
+.bolts-button,
+.bolts-form label,
+.bolts-toc,
+.bolts-toc h1 {
+	font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+	font-weight: bold;
+}

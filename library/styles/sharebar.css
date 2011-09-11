@@ -1,0 +1,40 @@
+/* @group Scrolling Sidebar
+----------------------------------------------- */
+
+/* required to avoid jumping */
+#sharing-wrapper {
+	float: left;
+	margin-left: -100px;
+	margin-top: 20px;
+	position: relative;
+}
+
+#sharing {
+	background: #fff;
+	padding: 0;
+	position: static;
+	top: 50px;
+	width: 70px;
+}
+
+#sharing .share {
+	margin: 0;
+	padding: 10px;
+}
+
+#sharing .share.google,
+#sharing .share.stumble {
+	background: #f5f5f5;
+}
+
+#sharing .share.twitter,
+#sharing .share.digg {
+	margin-left: -2.5px;
+}
+
+#sharing.fixed {
+	position: fixed;
+	top: 100px;
+}
+
+/* @end */
