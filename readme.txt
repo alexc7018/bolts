@@ -1,8 +1,8 @@
 === Bolts WordPress Parent Theme ===
 Contributors: aliso
 Requires at least: 3.1
-Tested up to: 3.1
-Version: 1.1
+Tested up to: 3.2.1
+Version: 1.2
 
 == Description ==
 
@@ -44,9 +44,21 @@ Theme options:
 
 = What if I have feedback or a question about Bolts? =
 
-Send any feedback to [alison@themejack.net](mailto:alison@themejack.net), or through the developer's site at [alisothegeek.com](http://alisothegeek.com/).
+Contact us with feedback at [Themejack](http://themejack.net) or our [support site](http://themejack.zendesk.com).
 
 == Changelog ==
+
+= 1.2 =
+* Fixed: Facebook widget no longer gets cut off
+* Enhanced: Login form widget displays user avatar & custom links
+* Improved: CSS files are queued consecutively to improve performance
+* Added: StumbleUpon shortcode
+* Added: Admin notices now present to notify users of updates
+* Added: New hooks around sidebar registration to allow unregistering sidebars via child themes
+* Misc. PHP Notice-level debugging
+
+= 1.1.1 =
+* Fixed contact form widget (was using incorrect shortcode)
 
 = 1.1 =
 * Misc. code cleanup

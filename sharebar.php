@@ -4,7 +4,7 @@
 			<div class="share twitter"><?php echo do_shortcode( '[twitter count="vertical"]' ); ?></div>
 			<div class="share google"><?php echo do_shortcode( '[google-plusone count="true" size="tall"]' ); ?></div>
 			<div class="share facebook"><?php echo do_shortcode( '[facebook layout="box_count" send="true"]' ); ?></div>
-			<div class="share stumble"><script src="http://www.stumbleupon.com/hostedbadge.php?s=5"></script></div>
+			<div class="share stumble"><?php echo do_shortcode( '[stumble-upon layout="box"]' ); ?></div>
 			<div class="share digg"><?php echo do_shortcode( '[digg]' ); ?></div>
 			<script type="text/javascript">
 			jQuery(document).ready(function ($) {  

@@ -136,115 +136,10 @@ class Bolts_Popular_Posts_Widget extends WP_Widget {
 
 
 /**
- * 125 ad space
- * 
- * @package Bolt
- * @since 1.0b1
- */
-class Bolts_125_Widget extends WP_Widget {
-	
-	function Bolts_125_Widget() {
-		
-		/* Widget settings. */
-		$widget_ops = array( 'classname' => 'ads125', 'description' => __( 'Display 125x125 ads', BOLTS_TEXT_DOMAIN ) );
-
-		/* Widget control settings. */
-		$control_ops = array( 'id_base' => 'bolts-125-widget' );
-
-		/* Create the widget. */
-		$this->WP_Widget( 'bolts-125-widget', __( 'Bolts 125 Ads', BOLTS_TEXT_DOMAIN ), $widget_ops, $control_ops );
-		
-	}
-	
-	function widget( $args, $instance ) {
-		extract( $args );
-		
-		/* User-selected settings. */
-		$title = apply_filters( 'widget_title', $instance['title'] );
-		$number_ads = $instance['number_ads'];
-		$ad_here_page = $instance['ad_here_page'];
-		
-		$all_ads = bolts_option( 'ads125' );
-		
-		if ( is_array( $all_ads ) ) {
-			shuffle( $all_ads );
-			$ads = array_slice( $all_ads, 0, 4 );
-		}
-		else {
-			$ads = array();
-		}
-
-		/* Before widget (defined by themes). */
-		echo $before_widget;
-
-		/* Title of widget (before and after defined by themes). */
-		if ( $title )
-			echo $before_title . $title . $after_title;
-		
-		if ( !empty( $ads ) ) {
-			foreach ( $ads as $ad ) {
-				echo '<a href="' . $ad['link'] . '" title="' . $ad['title'] . '"><img src="' . $ad['image'] . '" width="125" height="125" border="0" alt="' . $ad['title'] . '" /></a> ';
-			}
-		}
-		else {
-			for ( $i = 0; $i < $number_ads; $i++ ) {
-				if ( $ad_here_page != '' )
-					echo '<a href="' . $ad_here_page . '"><img src="' . BOLTS_URI . '/images/advertise-here.png" width="125" height="125" border="0" alt="' . __( 'Advertise Here', BOLTS_TEXT_DOMAIN ) . '" /></a> ';
-				else
-					echo '<img src="' . BOLTS_URI . '/images/advertise-here.png" width="125" height="125" border="0" alt="' . __( 'Advertise Here', BOLTS_TEXT_DOMAIN ) . '" /> ';
-			}
-		}
-		
-		/* After widget (defined by themes). */
-		echo $after_widget;
-	}
-	
-	function update( $new_instance, $old_instance ) {
-		$instance = $old_instance;
-
-		/* Strip tags (if needed) and update the widget settings. */
-		$instance['title'] = strip_tags( $new_instance['title'] );
-		$instance['number_ads'] = $new_instance['number_ads'];
-		$instance['ad_here_page'] = $new_instance['ad_here_page'];
-
-		return $instance;
-	}
-	
-	function form( $instance ) {
-
-		/* Set up some default widget settings. */
-		$defaults = array( 'title' => __( '', BOLTS_TEXT_DOMAIN ), 'number_ads' => 4, 'ad_here_page' => '' );
-		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
-		
-		<p><?php printf( __( 'Upload ads in the %s theme options%s.', BOLTS_TEXT_DOMAIN ), '<a href="themes.php?page=Bolts_Theme_Options.php#advertising">', '</a>' ); ?></p>
-		
-		<p>
-			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', BOLTS_TEXT_DOMAIN ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'title' ); ?>" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo $instance['title']; ?>" />
-		</p>
-		
-		<p>
-			<label for="<?php echo $this->get_field_id( 'number_ads' ); ?>"><?php _e( 'Number of ads to show:', BOLTS_TEXT_DOMAIN ); ?></label>
-			<input class="widefat" size="4" id="<?php echo $this->get_field_id( 'number_ads' ); ?>" name="<?php echo $this->get_field_name( 'number_ads' ); ?>" value="<?php echo $instance['number_ads']; ?>" />
-		</p>
-		
-		<p>
-			<label for="<?php echo $this->get_field_id( 'ad_here_page' ); ?>"><em><?php printf( __( 'Advertise Here %s link:', BOLTS_TEXT_DOMAIN ), '</em>' ); ?></label>
-			<input class="widefat" id="<?php echo $this->get_field_id( 'ad_here_page' ); ?>" name="<?php echo $this->get_field_name( 'ad_here_page' ); ?>" value="<?php echo $instance['ad_here_page']; ?>" />
-		</p>
-		
-	<?php
-	}
-	
-}
-
-
-
-/**
  * Facebook Like box
  * 
- * @package Bolt
- * @since 1.0b1
+ * @package Bolts
+ * @since 1.0
  */
 class Bolts_Facebook_Like_Widget extends WP_Widget {
 	
@@ -278,8 +173,15 @@ class Bolts_Facebook_Like_Widget extends WP_Widget {
 		/* Title of widget (before and after defined by themes). */
 		if ( $title )
 			echo $before_title . $title . $after_title;
-		
-		echo '<iframe src="http://www.facebook.com/plugins/likebox.php?href=' . $instance['page_url'] . '&amp;width=' . $instance['width'] . '&amp;colorscheme=' . $instance['colorscheme'] . '&amp;show_faces=' . $show_faces . '&amp;stream=' . $stream . '&amp;header=' . $header . '" style="border:none; overflow:hidden; width:' . $instance['width'] . 'px;"></iframe>';
+
+		echo '<div id="fb-root"></div>
+			<script>(function(d){
+				var js, id = "facebook-jssdk"; if (d.getElementById(id)) {return;}
+				js = d.createElement("script"); js.id = id; js.async = true;
+				js.src = "//connect.facebook.net/en_US/all.js#xfbml=1";
+				d.getElementsByTagName("head")[0].appendChild(js);
+			}(document));</script>
+			<div class="fb-like-box" data-href="' . $instance['page_url'] . '" data-width="' . $instance['width'] . '" data-show-faces="' . $show_faces . '" data-stream="' . $stream . '" data-header="' . $header . '"></div>';
 		
 		/* After widget (defined by themes). */
 		echo $after_widget;
@@ -355,8 +257,8 @@ class Bolts_Facebook_Like_Widget extends WP_Widget {
 /**
  * Twitter feed
  * 
- * @package Bolt
- * @since 1.0b1
+ * @package Bolts
+ * @since 1.0
  */
 class Bolts_Twitter_Widget extends WP_Widget {
 	
@@ -483,8 +385,9 @@ class Bolts_Twitter_Widget extends WP_Widget {
 /**
  * Login form widget
  * 
- * @package Bolt
- * @since 1.0b1
+ * @package Bolts
+ * @since 1.0
+ * @modified 1.2
  */
 class Bolts_Login_Form_Widget extends WP_Widget {
 	
@@ -503,27 +406,60 @@ class Bolts_Login_Form_Widget extends WP_Widget {
 	
 	function widget( $args, $instance ) {
 		extract( $args );
-		
-		global $wpdb;
 
 		/* User-selected settings. */
 		$loggedin_title = apply_filters( 'widget_title', $instance['loggedin_title'] );
 		$public_title = apply_filters( 'widget_title', $instance['public_title'] );
+
+		$show_avatar = $instance['show_avatar'];
+		$show_admin_link = $instance['show_admin_link'];
+
+		$custom_link_1_url = esc_attr( $instance['custom_link_1_url'] );
+		$custom_link_1_title = strip_tags( $instance['custom_link_1_title'] );
+		$custom_link_2_url = esc_attr( $instance['custom_link_2_url'] );
+		$custom_link_2_title = strip_tags( $instance['custom_link_2_title'] );
+		$custom_link_3_url = esc_attr( $instance['custom_link_3_url'] );
+		$custom_link_3_title = strip_tags( $instance['custom_link_3_title'] );
 
 		/* Before widget (defined by themes). */
 		echo $before_widget;
 		
 		// Login form
 		if ( is_user_logged_in() ) {
-			
+
+			global $current_user;
+			get_currentuserinfo();
+
 			/* Title of widget (before and after defined by themes). */
-			if ( $loggedin_title )
-				echo $before_title . $loggedin_title . $after_title;
-			
-			echo '<p>
-				<a href="' . wp_logout_url( $_SERVER['REQUEST_URI'] ) . '">' . __( 'Log Out', BOLTS_TEXT_DOMAIN ) . '</a> <br />
-				<a href="' . site_url() . '/wp-admin/">' . __( 'Site Admin', BOLTS_TEXT_DOMAIN ) . '</a>
-			</p>';
+			if ( $loggedin_title ) {
+				echo $before_title;
+				echo str_ireplace( '%%user%%', $current_user->display_name, $loggedin_title );
+				echo $after_title;
+			}
+
+			if ( $show_avatar ) {
+				echo '<div class="alignleft">' . get_avatar( $current_user->ID, 48 ) . '</div>';
+			}
+
+			echo '<ul>';
+
+			if ( $custom_link_1_url != '' && $custom_link_1_title != '' ) {
+				echo '<li><a href="' . $custom_link_1_url . '">' . $custom_link_1_title . '</a></li>';
+			}
+			if ( $custom_link_2_url != '' && $custom_link_2_title != '' ) {
+				echo '<li><a href="' . $custom_link_2_url . '">' . $custom_link_2_title . '</a></li>';
+			}
+			if ( $custom_link_3_url != '' && $custom_link_3_title != '' ) {
+				echo '<li><a href="' . $custom_link_3_url . '">' . $custom_link_3_title . '</a></li>';
+			}
+
+			if ( $show_admin_link && current_user_can('manage_options') ) {
+				echo '<li><a href="' . site_url() . '/wp-admin/">' . __( 'Site Admin', BOLTS_TEXT_DOMAIN ) . '</a></li>';
+			}
+
+			echo '<li><a href="' . wp_logout_url( $_SERVER['REQUEST_URI'] ) . '">' . __( 'Log Out', BOLTS_TEXT_DOMAIN ) . '</a></li>';
+
+			echo '</ul>';
 			
 		} else {
 			
@@ -539,9 +475,13 @@ class Bolts_Login_Form_Widget extends WP_Widget {
 					<input type="password" name="pwd" id="pwd" />
 					<label for="rememberme"><input name="rememberme" id="rememberme" type="checkbox" checked="checked" value="forever" /> ' . __( 'Remember me', BOLTS_TEXT_DOMAIN ) . '</label>
 					<input type="submit" name="submit" value="' . __( 'Log In', BOLTS_TEXT_DOMAIN ) . '" class="bolts-button" />
-					<input type="hidden" name="redirect_to" value="' . $_SERVER['REQUEST_URI'] . '" />
+					<input type="hidden" name="redirect_to" value="' . esc_attr( $_SERVER['REQUEST_URI'] ) . '" />
 			</form>
-			<!--<p><small><a href="' . site_url() . '/wp-login.php?action=lostpassword">' . __( 'Forgot password?', BOLTS_TEXT_DOMAIN ) . '</a></small></p>-->';
+			<ul>
+				<li><a href="' . site_url() . '/wp-login.php?action=lostpassword">' . __( 'Forgot password?', BOLTS_TEXT_DOMAIN ) . '</a></li>';
+
+			wp_register();
+			echo '</ul>';
 		}
 		
 		/* After widget (defined by themes). */
@@ -555,23 +495,80 @@ class Bolts_Login_Form_Widget extends WP_Widget {
 		$instance['loggedin_title'] = strip_tags( $new_instance['loggedin_title'] );
 		$instance['public_title'] = strip_tags( $new_instance['public_title'] );
 
+		$instance['show_avatar'] = ( isset( $new_instance['show_avatar'] ) ? true : false );
+		$instance['show_admin_link'] = ( isset( $new_instance['show_admin_link'] ) ? true : false );
+
+		$instance['custom_link_1_url'] = esc_attr( $new_instance['custom_link_1_url'] );
+		$instance['custom_link_1_title'] = strip_tags( $new_instance['custom_link_1_title'] );
+		$instance['custom_link_2_url'] = esc_attr( $new_instance['custom_link_2_url'] );
+		$instance['custom_link_2_title'] = strip_tags( $new_instance['custom_link_2_title'] );
+		$instance['custom_link_3_url'] = esc_attr( $new_instance['custom_link_3_url'] );
+		$instance['custom_link_3_title'] = strip_tags( $new_instance['custom_link_3_title'] );
+
 		return $instance;
 	}
 	
 	function form( $instance ) {
 
 		/* Set up some default widget settings. */
-		$defaults = array( 'public_title' => __( 'Log In', BOLTS_TEXT_DOMAIN ), 'loggedin_title' => __( 'Welcome', BOLTS_TEXT_DOMAIN ) );
+		$defaults = array(
+			'public_title' => __( 'Log In', BOLTS_TEXT_DOMAIN ),
+			'loggedin_title' => __( 'Welcome, %%user%%', BOLTS_TEXT_DOMAIN ),
+			'show_avatar' => 1,
+			'show_admin_link' => 1,
+			'custom_link_1_url' => '',
+			'custom_link_1_title' => '',
+			'custom_link_2_url' => '',
+			'custom_link_2_title' => '',
+			'custom_link_3_url' => '',
+			'custom_link_3_title' => '',
+		);
 		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
-		
+
+		<h2 style="margin-top: 0; padding-top: 0;">Logged Out</h2>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'public_title' ); ?>"><?php _e( 'Public title:', BOLTS_TEXT_DOMAIN ); ?></label>
-			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'public_title' ); ?>" name="<?php echo $this->get_field_name( 'public_title' ); ?>" value="<?php echo $instance['public_title']; ?>" />
+			<label for="<?php echo $this->get_field_id( 'public_title' ); ?>"><?php _e( 'Title:', BOLTS_TEXT_DOMAIN ); ?></label>
+			<input type="text" id="<?php echo $this->get_field_id( 'public_title' ); ?>" name="<?php echo $this->get_field_name( 'public_title' ); ?>" value="<?php echo $instance['public_title']; ?>" />
 		</p>
 		
+		<h2>Logged In</h2>
 		<p>
-			<label for="<?php echo $this->get_field_id( 'loggedin_title' ); ?>"><?php _e( 'Title for logged-in users:', BOLTS_TEXT_DOMAIN ); ?></label>
-			<input type="text" class="widefat" id="<?php echo $this->get_field_id( 'loggedin_title' ); ?>" name="<?php echo $this->get_field_name( 'loggedin_title' ); ?>" value="<?php echo $instance['loggedin_title']; ?>" />
+			<label for="<?php echo $this->get_field_id( 'loggedin_title' ); ?>"><strong><?php _e( 'Title:', BOLTS_TEXT_DOMAIN ); ?></strong></label>
+			<input type="text" id="<?php echo $this->get_field_id( 'loggedin_title' ); ?>" name="<?php echo $this->get_field_name( 'loggedin_title' ); ?>" value="<?php echo $instance['loggedin_title']; ?>" /><br />
+			<em><?php _e( "%%user%% = user's display name", BOLTS_TEXT_DOMAIN ); ?></em>
+		</p>
+
+		<h4>Custom Link 1</h4>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'custom_link_1_url' ); ?>"><?php _e( 'URL:', BOLTS_TEXT_DOMAIN ); ?></label>
+			<input type="text" id="<?php echo $this->get_field_id( 'custom_link_1_url' ); ?>" name="<?php echo $this->get_field_name( 'custom_link_1_url' ); ?>" value="<?php echo $instance['custom_link_1_url']; ?>" />
+			<label for="<?php echo $this->get_field_id( 'custom_link_1_title' ); ?>"><?php _e( 'Title:', BOLTS_TEXT_DOMAIN ); ?></label>
+			<input type="text" id="<?php echo $this->get_field_id( 'custom_link_1_title' ); ?>" name="<?php echo $this->get_field_name( 'custom_link_1_title' ); ?>" value="<?php echo $instance['custom_link_1_title']; ?>" />
+		</p>
+
+		<h4>Custom Link 2</h4>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'custom_link_2_url' ); ?>"><?php _e( 'URL:', BOLTS_TEXT_DOMAIN ); ?></label>
+			<input type="text" id="<?php echo $this->get_field_id( 'custom_link_2_url' ); ?>" name="<?php echo $this->get_field_name( 'custom_link_2_url' ); ?>" value="<?php echo $instance['custom_link_2_url']; ?>" />
+			<label for="<?php echo $this->get_field_id( 'custom_link_2_title' ); ?>"><?php _e( ' Title:', BOLTS_TEXT_DOMAIN ); ?></label>
+			<input type="text" id="<?php echo $this->get_field_id( 'custom_link_2_title' ); ?>" name="<?php echo $this->get_field_name( 'custom_link_2_title' ); ?>" value="<?php echo $instance['custom_link_2_title']; ?>" />
+		</p>
+
+		<h4>Custom Link 3</h4>
+		<p>
+			<label for="<?php echo $this->get_field_id( 'custom_link_3_url' ); ?>"><?php _e( 'URL:', BOLTS_TEXT_DOMAIN ); ?></label>
+			<input type="text" id="<?php echo $this->get_field_id( 'custom_link_3_url' ); ?>" name="<?php echo $this->get_field_name( 'custom_link_3_url' ); ?>" value="<?php echo $instance['custom_link_3_url']; ?>" />
+			<label for="<?php echo $this->get_field_id( 'custom_link_3_title' ); ?>"><?php _e( 'Title:', BOLTS_TEXT_DOMAIN ); ?></label>
+			<input type="text" id="<?php echo $this->get_field_id( 'custom_link_3_title' ); ?>" name="<?php echo $this->get_field_name( 'custom_link_3_title' ); ?>" value="<?php echo $instance['custom_link_3_title']; ?>" />
+		</p>
+
+		<p>
+			<input class="checkbox" type="checkbox" <?php checked( $instance['show_avatar'], true ); ?> id="<?php echo $this->get_field_id( 'show_avatar' ); ?>" name="<?php echo $this->get_field_name( 'show_avatar' ); ?>" />
+			<label for="<?php echo $this->get_field_id( 'show_avatar' ); ?>"><?php _e( 'Show avatar', BOLTS_TEXT_DOMAIN ); ?></label>
+		</p>
+		<p>
+			<input class="checkbox" type="checkbox" <?php checked( $instance['show_admin_link'], true ); ?> id="<?php echo $this->get_field_id( 'show_admin_link' ); ?>" name="<?php echo $this->get_field_name( 'show_admin_link' ); ?>" />
+			<label for="<?php echo $this->get_field_id( 'show_admin_link' ); ?>"><?php _e( 'Show "Site Admin" link to admins', BOLTS_TEXT_DOMAIN ); ?></label>
 		</p>
 		
 	<?php
@@ -584,8 +581,8 @@ class Bolts_Login_Form_Widget extends WP_Widget {
  * Contact form widget
  * 
  * @package Bolts
- * @since 1.0b1
- * @modified 1.1.1
+ * @since 1.0
+ * @modified 1.2
  */
 class Bolts_Contact_Form_Widget extends WP_Widget {
 	
@@ -669,7 +666,7 @@ class Bolts_Contact_Form_Widget extends WP_Widget {
 		);
 		$instance = wp_parse_args( (array) $instance, $defaults ); ?>
 		
-		<p><?php printf( __( 'Set the contact email in the %s theme options%s.', BOLTS_TEXT_DOMAIN ), '<a href="themes.php?page=Bolts_Theme_Options.php#general">', '</a>' ); ?></p>
+		<p><?php printf( __( 'Set the contact email in the %s theme options%s.', BOLTS_TEXT_DOMAIN ), '<a href="themes.php?page=bolts-options#general">', '</a>' ); ?></p>
 		
 		<p>
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _e( 'Title:', BOLTS_TEXT_DOMAIN ); ?></label>

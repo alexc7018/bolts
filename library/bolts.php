@@ -64,6 +64,8 @@ class Bolts {
 	public function __construct() {
 		
 		define( 'BOLTS_VERSION',        '1.1.1' );
+		if ( ! defined( 'THEME_VERSION' ) )
+			define( 'THEME_VERSION',    BOLTS_VERSION );
 		
 		if ( ! defined( 'THEME_NAME' ) )
 			define( 'THEME_NAME',       'Bolts' );
@@ -102,7 +104,49 @@ class Bolts {
 		
 		$this->wp_hooks();
 	}
-	
+
+	/**
+	 * Admin notices
+	 *
+	 * Ability to remotely add notices to the admin screen. This is to alert users
+	 * to downloadable updates, etc. since the theme doesn't live in the WP repository.
+	 *
+	 * @param     void
+	 * @return    void
+	 *
+	 * @access    public
+	 * @since     1.2
+	 * @modified  1.2
+	 */
+	public function admin_notices() {
+
+		$message_file = wp_remote_get( 'http://themejack.net/update-messages.txt' );
+		$messages = explode( "\n", $message_file['body'] );
+
+		$current_child = get_option( 'stylesheet' );
+		$current_parent = get_option( 'template' );
+
+		foreach ( $messages as $message ) {
+			$m = explode( '|', $message );
+			if ( $m[0] == 'bolts' && $current_parent == 'bolts' ) {
+				if ( $m[1] != BOLTS_VERSION ) {
+					echo '<div class="updated"><p>There is a new version of Bolts available.';
+					if ( $m[2] != '' ) {
+						echo ' ' . $m[2];
+					}
+					echo ' <a class="button" href="http://themejack.net/bolts/">Download Bolts ' . $m[1] . '</a></p></div>';
+				}
+			}
+			elseif ( $current_parent == $m[0] || $current_child == $m[0] ) {
+				if ( $m[1] != THEME_VERSION ) {
+					echo '<div class="updated fade"><p>There is a new version of ' . ucwords( $m[0] ) . ' available. ' .  $m[2];
+					echo ' <a class="button" href="http://themejack.net/my-account/">Download ' . ucwords( $m[0] ) . ' ' . $m[1] . '</a></p></div>';
+				}
+			}
+		}
+
+	}
+
 	/**
 	 * Admin style
 	 * 
@@ -193,12 +237,12 @@ class Bolts {
 		
 		$fields['author'] = '<p class="comment-form-author">
 			<label for="author">' . __( 'Name', BOLTS_TEXT_DOMAIN ) . ( $req ? ' <span class="required">*</span>' : '' ) . '</label>
-			<input id="author" name="author" type="text" value="' . esc_attr( $commenter['comment_author'] ) . '" size="30" ' . $aria_req . ' />
+			<input id="author" name="author" type="text" value="' . ( isset( $commenter['comment_author'] ) ? esc_attr( $commenter['comment_author'] ) : '' ) . '" size="30" ' . $aria_req . ' />
 		</p>';
 		
 		$fields['email'] = '<p class="comment-form-email">
 			<label for="email">' . __( 'Email', BOLTS_TEXT_DOMAIN ) . ( $req ? ' <span class="required">*</span>' : '' ) . '</label>
-			<input id="email" name="email" type="email" value="' . esc_attr( $commenter['comment_author_email'] ) . '" size="30" ' . $aria_req . ' />
+			<input id="email" name="email" type="email" value="' . ( isset( $commenter['comment_author_email'] ) ? esc_attr( $commenter['comment_author_email'] ) : '' ) . '" size="30" ' . $aria_req . ' />
 		</p>';
 		
 		return $fields;
@@ -943,10 +987,12 @@ class Bolts {
 	 * @param     void
 	 * @access    public
 	 * @since     1.0
-	 * @modified  1.0
+	 * @modified  1.2
 	 */
 	public function register_sidebars() {
-		
+
+		do_action( 'bolts_before_sidebars' );
+
 		register_sidebar( array(
 			'name'          => __( 'Primary Sidebar' ),
 			'id'            => 'primary',
@@ -956,7 +1002,7 @@ class Bolts {
 			'before_title'  => '<h1 class="widgettitle">',
 			'after_title'   => '</h1>'
 		) );
-		
+
 		register_sidebar( array(
 			'name'          => __( 'Secondary Sidebar' ),
 			'id'            => 'secondary',
@@ -966,7 +1012,7 @@ class Bolts {
 			'before_title'  => '<h1 class="widgettitle">',
 			'after_title'   => '</h1>'
 		) );
-		
+
 		register_sidebar( array(
 			'name'          => __( 'Footer Left Column' ),
 			'id'            => 'footer-left',
@@ -976,7 +1022,7 @@ class Bolts {
 			'before_title'  => '<h1 class="widgettitle">',
 			'after_title'   => '</h1>'
 		) );
-		
+
 		register_sidebar( array(
 			'name'          => __( 'Footer Center Column' ),
 			'id'            => 'footer-center',
@@ -986,7 +1032,7 @@ class Bolts {
 			'before_title'  => '<h1 class="widgettitle">',
 			'after_title'   => '</h1>'
 		) );
-		
+
 		register_sidebar( array(
 			'name'          => __( 'Footer Right Column' ),
 			'id'            => 'footer-right',
@@ -996,6 +1042,8 @@ class Bolts {
 			'before_title'  => '<h1 class="widgettitle">',
 			'after_title'   => '</h1>'
 		) );
+
+		do_action( 'bolts_after_sidebars' );
 		
 	}
 	
@@ -1050,6 +1098,12 @@ class Bolts {
 	public function styles() {
 		
 		if ( ! is_admin() ) {
+
+			wp_register_style( 'bolts-reset', BOLTS_STYLES . '/reset.css', null, THEME_VERSION );
+			wp_register_style( 'bolts-main-styles', BOLTS_STYLES . '/main.css', array( 'bolts-reset' ), THEME_VERSION );
+			wp_register_style( 'bolts-wordpress-styles', BOLTS_STYLES . '/wordpress.css', array( 'bolts-main-styles' ), THEME_VERSION );
+			wp_register_style( 'bolts-proprietary-styles', BOLTS_STYLES . '/bolts.css', array( 'bolts-wordpress-styles' ), THEME_VERSION );
+			wp_enqueue_style( 'bolts-proprietary-styles' );
 		
 			if ( bolts_option( 'font_styles' ) ) {
 				wp_register_style( 'bolts-font-styles', BOLTS_STYLES . '/fonts.css', null, THEME_VERSION );
@@ -1139,6 +1193,8 @@ class Bolts {
 		add_action( 'wp_print_styles',      array( &$this, 'custom_style' ) );
 		add_action( 'wp_footer',            array( &$this, 'google_analytics' ) );
 		
+		add_action( 'admin_notices',        array( &$this, 'admin_notices' ) );
+
 		add_action( 'admin_head',           array( &$this, 'admin_style' ) );
 		add_filter( 'admin_footer_text',    array( &$this, 'admin_footer_text' ) );
 		add_action( 'login_head',           array( &$this, 'login_style' ) );

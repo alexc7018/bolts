@@ -10,15 +10,16 @@ class Bolts_Shortcodes {
 	
 	function __construct() {
 		
-		add_shortcode( 'divider',      array( &$this, 'divider' ) );
-		add_shortcode( 'facebook',     array( &$this, 'facebook' ) );
-		add_shortcode( 'twitter',      array( &$this, 'twitter' ) );
-		add_shortcode( 'digg',         array( &$this, 'digg' ) );
+		add_shortcode( 'divider',        array( &$this, 'divider' ) );
+		add_shortcode( 'facebook',       array( &$this, 'facebook' ) );
+		add_shortcode( 'twitter',        array( &$this, 'twitter' ) );
+		add_shortcode( 'digg',           array( &$this, 'digg' ) );
+		add_shortcode( 'stumble-upon',   array( &$this, 'stumble_upon' ) );
 		add_shortcode( 'google-plusone', array( &$this, 'google_plusone' ) );
-		add_shortcode( 'linkedin',     array( &$this, 'linkedin' ) );
-		add_shortcode( 'contact-form', array( &$this, 'form' ) );
-		add_shortcode( 'toc',          array( &$this, 'table_of_contents' ) );
-		add_shortcode( 'columns',      array( &$this, 'columns' ) );
+		add_shortcode( 'linkedin',       array( &$this, 'linkedin' ) );
+		add_shortcode( 'contact-form',   array( &$this, 'form' ) );
+		add_shortcode( 'toc',            array( &$this, 'table_of_contents' ) );
+		add_shortcode( 'columns',        array( &$this, 'columns' ) );
 		
 	}
 	
@@ -26,7 +27,7 @@ class Bolts_Shortcodes {
 	 * [bolts-divider]
 	 * Horizontal rule
 	 *
-	 * @since 1.0b1
+	 * @since 1.0
 	 */
 	public function divider( $atts ) {
 		
@@ -43,7 +44,7 @@ class Bolts_Shortcodes {
 	 * Default font & color scheme based on theme; they can be
 	 * overridden in the post editor.
 	 *
-	 * @since 1.0b1
+	 * @since 1.0
 	 */
 	public function facebook( $atts ) {
 		extract( shortcode_atts( array(
@@ -78,7 +79,7 @@ class Bolts_Shortcodes {
 	 * Default font & color scheme based on theme; they can be
 	 * overridden in the post editor.
 	 *
-	 * @since 1.0b1
+	 * @since 1.0
 	 */
 	public function twitter( $atts ) {
 		extract( shortcode_atts( array(
@@ -99,7 +100,7 @@ class Bolts_Shortcodes {
 	 * [bolts-digg layout="wide/medium/compact/icon"]
 	 * Digg button
 	 *
-	 * @since 1.0b1
+	 * @since 1.0
 	 */
 	public function digg( $atts ) {
 		extract( shortcode_atts( array(
@@ -113,12 +114,36 @@ class Bolts_Shortcodes {
 		return '<a style="text-decoration: none;" class="DiggThisButton Digg' . ucfirst( $layout ) . '" href="http://digg.com/submit?url=' . get_permalink( $post->ID ) . '"></a>';
 		
 	}
-	
+
+	/**
+	 * [stumble-upon layout="horizontal|rounded|number|box|icon-big|icon-small"]
+	 * StumbleUpon button
+	 *
+	 * @since 1.2
+	 */
+	public function stumble_upon( $atts ) {
+		extract( shortcode_atts( array(
+			'layout' => 'box'
+		), $atts ) );
+
+		$layouts = array(
+			'horizontal' => 1,
+			'rounded' => 2,
+			'number' => 3,
+			'icon-small' => 4,
+			'box' => 5,
+			'icon-big' => 6,
+		);
+
+		return '<script src="http://www.stumbleupon.com/hostedbadge.php?s=' . $layouts[$layout] . '"></script>';
+
+	}
+
 	/**
 	 * [google-plusone size="standard|small|medium|tall" count="true|false"]
 	 * Digg button
 	 *
-	 * @since 1.0b1
+	 * @since 1.0
 	 */
 	public function google_plusone( $atts ) {
 		extract( shortcode_atts( array(
@@ -152,7 +177,7 @@ class Bolts_Shortcodes {
 	 * [bolts-contact-form fields="name,email,company,website,message"]
 	 * Contact form
 	 *
-	 * @since 1.0b1
+	 * @since 1.0
 	 */
 	public function form( $atts ) {
 		extract( shortcode_atts( array(
@@ -321,7 +346,7 @@ class Bolts_Shortcodes {
 	 * [toc levels="2-6" type="numbered|bullets|mixed"]
 	 * Wikipedia-style table of contents
 	 *
-	 * @since 1.0b2
+	 * @since 1.0
 	 */
 	public function table_of_contents( $atts, $content = null ) {
 		extract( shortcode_atts( array(
@@ -353,7 +378,7 @@ class Bolts_Shortcodes {
 	 * [columns across="2|3|4|5|6|etc."]Content[column-break]More content[/columns]
 	 * Columnized text
 	 *
-	 * @since 1.0b1
+	 * @since 1.0
 	 */
 	public function columns( $atts, $content = null ) {
 		extract( shortcode_atts( array(
