@@ -134,7 +134,7 @@ class Bolts {
 					if ( $m[2] != '' ) {
 						echo ' ' . $m[2];
 					}
-					echo ' <a class="button" href="http://themejack.net/bolts/">Download Bolts ' . $m[1] . '</a></p></div>';
+					echo ' <a class="button" href="https://github.com/aliso/bolts/zipball/master">Download Bolts ' . $m[1] . '</a></p></div>';
 				}
 			}
 			elseif ( $current_parent == $m[0] || $current_child == $m[0] ) {
