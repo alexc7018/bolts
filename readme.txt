@@ -2,7 +2,7 @@
 Contributors: aliso
 Requires at least: 3.1
 Tested up to: 3.2.1
-Version: 1.2
+Version: 1.2.1
 
 == Description ==
 
@@ -47,6 +47,9 @@ Theme options:
 Contact us with feedback at [Themejack](http://themejack.net) or our [support site](http://themejack.zendesk.com).
 
 == Changelog ==
+
+= 1.2.1 =
+* Fixed: Child theme style.css is now queued after all Bolts default styles for proper overriding
 
 = 1.2 =
 * Fixed: Facebook widget no longer gets cut off

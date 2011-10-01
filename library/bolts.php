@@ -1099,14 +1099,14 @@ class Bolts {
 		
 		if ( ! is_admin() ) {
 
-			wp_register_style( 'bolts-reset', BOLTS_STYLES . '/reset.css', null, THEME_VERSION );
-			wp_register_style( 'bolts-main-styles', BOLTS_STYLES . '/main.css', array( 'bolts-reset' ), THEME_VERSION );
-			wp_register_style( 'bolts-wordpress-styles', BOLTS_STYLES . '/wordpress.css', array( 'bolts-main-styles' ), THEME_VERSION );
-			wp_register_style( 'bolts-proprietary-styles', BOLTS_STYLES . '/bolts.css', array( 'bolts-wordpress-styles' ), THEME_VERSION );
+			wp_register_style( 'bolts-reset', BOLTS_STYLES . '/reset.css', null, BOLTS_VERSION );
+			wp_register_style( 'bolts-main-styles', BOLTS_STYLES . '/main.css', array( 'bolts-reset' ), BOLTS_VERSION );
+			wp_register_style( 'bolts-wordpress-styles', BOLTS_STYLES . '/wordpress.css', array( 'bolts-main-styles' ), BOLTS_VERSION );
+			wp_register_style( 'bolts-proprietary-styles', BOLTS_STYLES . '/bolts.css', array( 'bolts-wordpress-styles' ), BOLTS_VERSION );
 			wp_enqueue_style( 'bolts-proprietary-styles' );
 		
 			if ( bolts_option( 'font_styles' ) ) {
-				wp_register_style( 'bolts-font-styles', BOLTS_STYLES . '/fonts.css', null, THEME_VERSION );
+				wp_register_style( 'bolts-font-styles', BOLTS_STYLES . '/fonts.css', null, BOLTS_VERSION );
 				wp_enqueue_style( 'bolts-font-styles' );
 			}
 			
@@ -1118,9 +1118,19 @@ class Bolts {
 			}
 			
 			if ( bolts_option( 'floating_sharebar' ) ) {
-				wp_register_style( 'bolts-sharebar', BOLTS_STYLES . '/sharebar.css', null, THEME_VERSION );
+				wp_register_style( 'bolts-sharebar', BOLTS_STYLES . '/sharebar.css', null, BOLTS_VERSION );
 				wp_enqueue_style( 'bolts-sharebar' );
 			}
+
+            // Load child theme stylesheets after Bolts to override Bolts defaults
+            if ( file_exists( CHILD_THEME_DIR . '/style.css' ) ) {
+                // Compare child style.css to parent style.css, if they're the same, Bolts is active theme (not parent)
+                // and there's no need to load the stylesheet again
+                if ( md5( CHILD_THEME_DIR . '/style.css' ) !== md5_file( THEME_DIR . '/style.css' ) ) {
+                    wp_register_style( 'child-theme-styles', CHILD_THEME_URI . '/style.css', array( 'bolts-proprietary-styles' ), THEME_VERSION );
+                    wp_enqueue_style( 'child-theme-styles' );
+                }
+            }
 			
 			// Load custom stylesheets last so they override everything
 			if ( file_exists( THEME_DIR . '/custom-style.css' ) ) {
