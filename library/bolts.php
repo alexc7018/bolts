@@ -36,7 +36,7 @@
  * @copyright  Copyright (c) 2011, Themejack
  * @license    http://www.gnu.org/licenses/gpl-3.0.html
  * @since      1.0
- * @modified   1.0
+ * @modified   1.2.2
  */
 class Bolts {
 	
@@ -59,11 +59,11 @@ class Bolts {
 	 * 
 	 * @access    public
 	 * @since     1.0
-	 * @modified  1.1.1
+	 * @modified  1.2.2
 	 */
 	public function __construct() {
 		
-		define( 'BOLTS_VERSION',        '1.2' );
+		define( 'BOLTS_VERSION',        '1.2.2' );
 		if ( ! defined( 'THEME_VERSION' ) )
 			define( 'THEME_VERSION',    BOLTS_VERSION );
 		
@@ -1093,21 +1093,21 @@ class Bolts {
 	 * @param     void
 	 * @access    public
 	 * @since     1.0
-	 * @modified  1.1
+	 * @modified  1.2.2
 	 */
 	public function styles() {
 		
 		if ( ! is_admin() ) {
 
 			wp_register_style( 'bolts-reset', BOLTS_STYLES . '/reset.css', null, BOLTS_VERSION );
-			wp_register_style( 'bolts-main-styles', BOLTS_STYLES . '/main.css', array( 'bolts-reset' ), BOLTS_VERSION );
-			wp_register_style( 'bolts-wordpress-styles', BOLTS_STYLES . '/wordpress.css', array( 'bolts-main-styles' ), BOLTS_VERSION );
-			wp_register_style( 'bolts-proprietary-styles', BOLTS_STYLES . '/bolts.css', array( 'bolts-wordpress-styles' ), BOLTS_VERSION );
-			wp_enqueue_style( 'bolts-proprietary-styles' );
+			wp_register_style( 'bolts-main', BOLTS_STYLES . '/main.css', array( 'bolts-reset' ), BOLTS_VERSION );
+			wp_register_style( 'bolts-wordpress', BOLTS_STYLES . '/wordpress.css', array( 'bolts-main' ), BOLTS_VERSION );
+			wp_register_style( 'bolts-proprietary', BOLTS_STYLES . '/bolts.css', array( 'bolts-wordpress' ), BOLTS_VERSION );
+			wp_enqueue_style( 'bolts-proprietary' );
 		
 			if ( bolts_option( 'font_styles' ) ) {
-				wp_register_style( 'bolts-font-styles', BOLTS_STYLES . '/fonts.css', null, BOLTS_VERSION );
-				wp_enqueue_style( 'bolts-font-styles' );
+				wp_register_style( 'bolts-fonts', BOLTS_STYLES . '/fonts.css', null, BOLTS_VERSION );
+				wp_enqueue_style( 'bolts-fonts' );
 			}
 			
 			if ( bolts_option( 'color_scheme' ) ) {
@@ -1127,21 +1127,21 @@ class Bolts {
                 // Compare child style.css to parent style.css, if they're the same, Bolts is active theme (not parent)
                 // and there's no need to load the stylesheet again
                 if ( md5( CHILD_THEME_DIR . '/style.css' ) !== md5_file( THEME_DIR . '/style.css' ) ) {
-                    wp_register_style( 'child-theme-styles', CHILD_THEME_URI . '/style.css', array( 'bolts-proprietary-styles' ), THEME_VERSION );
-                    wp_enqueue_style( 'child-theme-styles' );
+                    wp_register_style( 'bolts-child-theme', CHILD_THEME_URI . '/style.css', array( 'bolts-proprietary' ), THEME_VERSION );
+                    wp_enqueue_style( 'bolts-child-theme' );
                 }
             }
 			
 			// Load custom stylesheets last so they override everything
 			if ( file_exists( THEME_DIR . '/custom-style.css' ) ) {
-				wp_register_style( 'bolts-custom-css', THEME_URI . '/custom-style.css', null, THEME_VERSION );
-				wp_enqueue_style( 'bolts-custom-css' );
+				wp_register_style( 'bolts-custom', THEME_URI . '/custom-style.css', array( 'bolts-proprietary' ), THEME_VERSION );
+				wp_enqueue_style( 'bolts-custom' );
 			}
 			
 			// Load custom stylesheets last so they override everything
 			if ( file_exists( CHILD_THEME_DIR . '/custom-style.css' ) ) {
-				wp_register_style( 'bolts-custom-child-css', CHILD_THEME_URI . '/custom-style.css', null, THEME_VERSION );
-				wp_enqueue_style( 'bolts-custom-child-css' );
+				wp_register_style( 'bolts-custom-child', CHILD_THEME_URI . '/custom-style.css', array( 'bolts-proprietary' ), THEME_VERSION );
+				wp_enqueue_style( 'bolts-custom-child' );
 			}
 			
 		}
